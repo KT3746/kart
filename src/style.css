@@ -713,17 +713,17 @@ body:not(.is-race) .pause-btn {
   display: none;
 }
 
-body.is-race.touch-on .touch,
-body.is-race #touch {
+/* Pads only when JS marks touch-on (phone / coarse pointer). */
+body.is-race.touch-on .touch {
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
 }
 
-/* Phone race only: pads stay up even if JS detection lies. Never on menus. */
+/* Phone race backup if detection lies. Never force pads on wide desktop. */
 @media (max-width: 819px) {
-  body.is-race #touch,
-  body.is-race .touch {
+  body.is-race.touch-on #touch,
+  body.is-race.touch-on .touch {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
