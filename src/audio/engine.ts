@@ -10,7 +10,7 @@ export class AudioEngine {
   private noiseFilter: BiquadFilterNode | null = null;
   private squeal: OscillatorNode | null = null;
   private squealGain: GainNode | null = null;
-  muted = true;
+  muted = false;
   unlocked = false;
 
   async unlock(): Promise<void> {
@@ -85,7 +85,7 @@ export class AudioEngine {
 
   private applyMaster(): void {
     if (!this.master) return;
-    this.master.gain.value = this.muted ? 0 : 0.14;
+    this.master.gain.value = this.muted ? 0 : 0.18;
   }
 
   setMuted(muted: boolean): void {

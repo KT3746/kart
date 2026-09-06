@@ -28,7 +28,7 @@ export class Game {
   trackId: TrackId = "orla";
   race: Race | null = null;
   cup = new Championship();
-  muted = true;
+  muted = false;
   private menuScene = new THREE.Scene();
   private menuKart: THREE.Group | null = null;
   private clock = new THREE.Clock();
