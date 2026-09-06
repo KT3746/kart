@@ -7,7 +7,7 @@ import { ItemSystem } from "../items/system";
 import { createKartMesh } from "../karts/mesh";
 import { AI_NAMES, AI_STYLES, getKart, KARTS } from "../karts/roster";
 import { collideKarts, KartBody, stepKart } from "../physics/kart";
-import { buildTrack } from "../tracks/builder";
+import { buildTrack, nearestMainProgress } from "../tracks/builder";
 import { getTrackDef } from "../tracks/catalog";
 import type { KartId, TrackId } from "../types";
 import { applyLowPerfScene } from "../perf";
@@ -70,7 +70,14 @@ export class Race {
   }
 
   private spawn(playerKart: KartId): void {
-    const start = this.built.startPose;
+    // Sit clearly past the seam (progress≈0) so queryTrack doesn't snap to 0.99.
+    const startSample = nearestMainProgress(this.built.samples, 0.02);
+    const heading = Math.atan2(startSample.tangent.x, startSample.tangent.z);
+    const start = {
+      position: startSample.position.clone(),
+      heading,
+      progress: startSample.progress,
+    };
     const unused = KARTS.filter((k) => k.id !== playerKart);
     const infos = [
       { id: "you", name: "Você", kartId: playerKart, isPlayer: true, aiStyle: "linha" as const },
@@ -92,10 +99,10 @@ export class Race {
         .clone()
         .addScaledVector(right, lane)
         .addScaledVector(back, row * 3.2 + 1.2);
-      pos.y = start.position.y;
+      pos.y = start.position.y + 0.06;
       body.reset(pos, start.heading);
-      body.progress = 0;
-      body.lastProgress = 0.995;
+      body.progress = start.progress;
+      body.lastProgress = start.progress;
       const mesh = createKartMesh(getKart(info.kartId));
       mesh.position.copy(pos);
       mesh.rotation.y = start.heading;
