@@ -185,10 +185,10 @@ export function stepKart(
   kart.surfaceGrip = grip;
 
   const top =
-    (18 + stats.topSpeed * 16) *
-    (kart.boostTime > 0 ? 1.36 : 1) *
+    (22 + stats.topSpeed * 18) *
+    (kart.boostTime > 0 ? 1.42 : 1) *
     (kart.onAsphalt ? 1 : kart.airborne ? 0.72 : onRunoff ? 0.32 : 0.18);
-  const acc = 7 + stats.accel * 10;
+  const acc = 9.5 + stats.accel * 12;
 
   if (!kart.onAsphalt && !kart.airborne) {
     kart.speed *= Math.exp(-(onRunoff ? 1.8 : 3.2) * dt);
@@ -215,38 +215,26 @@ export function stepKart(
     steer += kart.driftDir * (0.28 + stats.drift * 0.18);
     kart.speed *= Math.exp(-0.07 * dt);
   } else if (kart.drifting) {
-    if (kart.driftCharge > 0.52 && kart.slipTime <= 0) {
-      kart.boostTime = Math.min(1.4, 0.42 + kart.driftCharge * 0.6 * stats.drift);
+    if (kart.driftCharge > 0.4 && kart.slipTime <= 0) {
+      kart.boostTime = Math.min(1.85, 0.55 + kart.driftCharge * 0.85 * stats.drift);
     }
     kart.drifting = false;
     kart.driftCharge = 0;
   }
 
   const steerScale = (kart.airborne ? 0.15 : 1) * clamp(grip, 0.12, 1.15);
-  // Casual stability: gently counter lateral drift when the player is not hard-steering.
-  let assist = steer;
-  if (!kart.airborne && !kart.drifting && Math.abs(steerIn) < 0.55 && Math.abs(q.lateral) > 0.35) {
-    const pull = clamp(q.lateral / Math.max(2.5, q.halfWidth), -1, 1);
-    // Physics steer sign: negative yaw reads as screen-right; lateral+ is along q.right.
-    // Nudge heading back toward the ribbon center.
-    assist += -pull * (0.55 + Math.abs(kart.speed) * 0.012) * (1 - Math.abs(steerIn));
-  }
-  kart.yawRate = damp(kart.yawRate, assist * (0.85 + (1 - grip) * 0.25), 9, dt);
-  kart.heading += kart.yawRate * (2.6 + Math.abs(kart.speed) * 0.05) * dt * steerScale;
-  if (Math.abs(steerIn) < 0.35 && kart.onAsphalt && !kart.drifting && !kart.airborne) {
+  // Player steers — no auto-pilot / center pull (felt like "drives itself").
+  kart.yawRate = damp(kart.yawRate, steer * (0.85 + (1 - grip) * 0.25), 9, dt);
+  kart.heading += kart.yawRate * (2.8 + Math.abs(kart.speed) * 0.055) * dt * steerScale;
+  // Tiny road hint only when hands are off the stick — not enough to drive for you.
+  if (Math.abs(steerIn) < 0.08 && kart.onAsphalt && !kart.drifting && !kart.airborne) {
     const roadH = Math.atan2(q.tangent.x, q.tangent.z);
-    const align = 4.2; // was ~1.2 — keep kart pointed with the road
-    kart.heading += wrapPi(roadH - kart.heading) * (1 - Math.exp(-align * dt));
+    kart.heading += wrapPi(roadH - kart.heading) * (1 - Math.exp(-0.7 * dt));
   }
   kart.heading = wrapPi(kart.heading);
 
   FWD.set(Math.sin(kart.heading), 0, Math.cos(kart.heading));
   kart.position.addScaledVector(FWD, kart.speed * dt);
-  // Soft recenter while still on asphalt / light runoff
-  if (!kart.airborne && Math.abs(steerIn) < 0.6 && Math.abs(q.lateral) > 0.4) {
-    const recenter = Math.min(1, Math.abs(q.lateral) / Math.max(1, q.halfWidth));
-    kart.position.addScaledVector(q.right, -Math.sign(q.lateral) * 5.5 * recenter * dt);
-  }
   if (onRunoff && !kart.airborne) {
     kart.position.addScaledVector(q.right, -Math.sign(q.lateral) * 6.4 * dt);
   }
