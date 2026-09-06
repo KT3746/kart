@@ -223,11 +223,11 @@ function makeStartGate(sample: TrackSample): THREE.Group {
   }
 
   const gantry = new THREE.Mesh(
-    new THREE.BoxGeometry(hw * 2 + 1.6, 0.22, 0.22),
+    new THREE.BoxGeometry(hw * 2 + 1.6, 0.14, 0.14),
     new THREE.MeshStandardMaterial({ color: 0x1a1d24, metalness: 0.4, roughness: 0.45 }),
   );
   gantry.position.copy(sample.position);
-  gantry.position.y += 4.15;
+  gantry.position.y += 7.2;
   gantry.rotation.y = yaw;
   g.add(gantry);
 
@@ -238,7 +238,7 @@ function makeStartGate(sample: TrackSample): THREE.Group {
     const x = (i - 1.5) * 0.42;
     bulb.position.copy(sample.position);
     bulb.position.addScaledVector(sample.binormal, x);
-    bulb.position.y += 3.95;
+    bulb.position.y += 6.95;
     bulb.position.addScaledVector(sample.tangent, 0.18);
     g.add(bulb);
   });
