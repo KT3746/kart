@@ -742,10 +742,10 @@ body.is-race.touch-on .touch {
 }
 
 .stick-wrap {
-  left: calc(12px + var(--safe-l));
-  bottom: calc(16px + var(--safe-b));
-  width: 150px;
-  height: 150px;
+  left: calc(8px + var(--safe-l));
+  bottom: calc(12px + var(--safe-b));
+  width: 170px;
+  height: 170px;
 }
 
 .stick-base,
@@ -764,18 +764,43 @@ body.is-race.touch-on .touch {
 .stick-knob {
   width: 64px;
   height: 64px;
-  left: 43px;
-  top: 43px;
+  left: 53px;
+  top: 53px;
   background: radial-gradient(circle at 35% 30%, #7ad7ff, #2a6fd4 55%, #143a7a);
   border: 2px solid rgba(255, 255, 255, 0.55);
   box-shadow: 0 4px 14px rgba(20, 80, 180, 0.55);
 }
 
+/* Steer zone stays active — just invisible on screen */
+.stick-invisible .stick-base,
+.stick-invisible .stick-knob {
+  opacity: 0 !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
 .pad-right {
   right: calc(12px + var(--safe-r));
-  bottom: calc(16px + var(--safe-b));
-  width: 168px;
-  height: 200px;
+  bottom: calc(18px + var(--safe-b));
+  width: auto;
+  height: auto;
+}
+.pad-right.pad-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 12px;
+  position: absolute;
+  pointer-events: none;
+}
+.pad-right.pad-row .pad-btn {
+  position: relative;
+  left: auto;
+  right: auto;
+  top: auto;
+  bottom: auto;
+  pointer-events: auto;
 }
 .pad-btn.drift,
 .pad-btn.brake {
@@ -783,7 +808,6 @@ body.is-race.touch-on .touch {
 }
 
 .pad-btn {
-  position: absolute;
   border: 2px solid rgba(255, 255, 255, 0.35);
   color: #fff;
   font-family: var(--font-display);
@@ -798,57 +822,56 @@ body.is-race.touch-on .touch {
 }
 
 .pad-btn.accel {
-  right: 0;
-  bottom: 0;
-  width: 160px;
-  height: 160px;
-  min-width: 160px;
-  min-height: 160px;
-  font-size: 24px;
-  border-radius: 32px;
-  background: linear-gradient(160deg, #6dff8a, #12a84a 55%, #0a6b30);
-  border-color: rgba(180, 255, 200, 0.65);
-}
-
-.pad-btn.brake {
-  left: 0;
-  bottom: 0;
-  width: 72px;
-  height: 72px;
+  width: 148px;
+  height: 148px;
+  min-width: 148px;
+  min-height: 148px;
+  font-size: 22px;
+  letter-spacing: 0.1em;
   border-radius: 50%;
-  background: linear-gradient(160deg, #ff7a6e, #d42222 60%, #8a1010);
-  border-color: rgba(255, 200, 190, 0.55);
-  font-size: 12px;
+  border: 3px solid rgba(255, 255, 255, 0.75);
+  background:
+    radial-gradient(circle at 35% 28%, #b6ffc4 0%, #3dff7a 28%, #12c24e 58%, #087a32 100%);
+  box-shadow:
+    0 0 0 4px rgba(40, 220, 100, 0.25),
+    0 10px 28px rgba(0, 0, 0, 0.45),
+    inset 0 -6px 14px rgba(0, 0, 0, 0.28),
+    inset 0 6px 12px rgba(255, 255, 255, 0.35);
 }
 
+.pad-btn.brake,
 .pad-btn.drift {
-  left: 0;
-  top: 42px;
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: linear-gradient(160deg, #c9a0ff, #7b3df0 55%, #3d1a9a);
-  border-color: rgba(230, 210, 255, 0.55);
-  font-size: 12px;
+  display: none !important;
 }
 
 .pad-btn.item {
-  right: 8px;
-  top: 8px;
-  width: 120px;
-  height: 56px;
-  border-radius: 16px;
-  background: linear-gradient(160deg, #ffe27a, #f0a020 55%, #c46a00);
-  border-color: rgba(255, 240, 180, 0.7);
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #ffe9a0, #f5b020 50%, #d07800);
+  border: 3px solid rgba(255, 245, 200, 0.85);
   color: #1a1200;
   text-shadow: none;
-  font-size: 15px;
+  font-size: 16px;
+  box-shadow:
+    0 0 0 3px rgba(255, 180, 40, 0.22),
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    inset 0 4px 10px rgba(255, 255, 255, 0.35);
 }
 
 .pad-btn.active {
-  filter: brightness(1.18);
-  transform: scale(0.97);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35), 0 4px 12px rgba(0, 0, 0, 0.45);
+  filter: brightness(1.12) saturate(1.1);
+  transform: scale(0.94);
+  box-shadow:
+    0 0 0 5px rgba(255, 255, 255, 0.4),
+    0 6px 16px rgba(0, 0, 0, 0.45),
+    inset 0 2px 8px rgba(255, 255, 255, 0.35);
+}
+.pad-btn.accel.active {
+  box-shadow:
+    0 0 0 6px rgba(80, 255, 140, 0.45),
+    0 6px 18px rgba(0, 0, 0, 0.45),
+    inset 0 2px 10px rgba(255, 255, 255, 0.4);
 }
 
 .soot-veil {
