@@ -188,10 +188,11 @@ function decorateNeon(root: THREE.Group, track: BuiltTrack, mobile: boolean): vo
   for (let i = 0; i < main.length; i += step) {
     const s = main[i];
     for (const side of [-1, 1]) {
-      dummy.position.copy(s.position).addScaledVector(s.binormal, side * (s.halfWidth + 4.2));
-      dummy.position.y = s.position.y + 4.6;
+      // Keep facades well clear of the chase camera (narrow neon streets).
+      dummy.position.copy(s.position).addScaledVector(s.binormal, side * (s.halfWidth + s.runoff + 9.5));
+      dummy.position.y = s.position.y + 5.2;
       dummy.rotation.set(0, Math.atan2(s.tangent.x, s.tangent.z) + Math.PI / 2, 0);
-      dummy.scale.set(3.4, 5 + ((i * 3) % 5), 2.6);
+      dummy.scale.set(2.4, 5.5 + ((i * 3) % 5), 2.0);
       dummy.updateMatrix();
       mats.push(dummy.matrix.clone());
       dummy.position.y += dummy.scale.y * 0.42;
