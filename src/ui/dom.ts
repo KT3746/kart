@@ -119,7 +119,7 @@ export class UI {
           <div class="topbar">
             <div class="brand">
               <div class="eyebrow">Corrida de kart original</div>
-              <h1>Pista Maluca</h1>
+              <h1>KART</h1>
               <p class="lede">Terceira pessoa, asfalto com peso, itens que mudam a prova. Sem mascote emprestado — só o grid e a noite.</p>
             </div>
             <button type="button" class="icon-btn mute-btn" data-act="mute" aria-label="${muted ? "Ativar som" : "Mudo"}">${muted ? "Som off" : "Som"}</button>
@@ -162,7 +162,7 @@ export class UI {
           <div class="eyebrow">Ficha técnica</div>
           <h2>Créditos</h2>
           <div class="sheet">
-            <p><b>Pista Maluca</b> é um jogo original de corrida no navegador. Inspirado no gênero — câmera de perseguição, caixas, caos justo — com nomes, silhuetas e itens próprios.</p>
+            <p><b>KART</b> é um jogo original de corrida no navegador. Inspirado no gênero — câmera de perseguição, caixas, caos justo — com nomes, silhuetas e itens próprios.</p>
             <p>Three.js · WebGL · áudio procedural. Feito para desktop e Safari no iPhone.</p>
             <p>MIT · KT3746</p>
           </div>
@@ -220,7 +220,7 @@ export class UI {
         </div>
         <div class="screen-foot">
           <button type="button" class="btn ghost" data-act="back">Voltar</button>
-          <button type="button" class="btn primary" data-act="go">Largar</button>
+          <button type="button" class="btn primary" data-act="go">Correr</button>
         </div>
       </section>`);
   }
