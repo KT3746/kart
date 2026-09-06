@@ -1,8 +1,8 @@
-# Pista Maluca
+# KART
 
 Corrida de kart **original** no navegador. Câmera de perseguição, asfalto com peso, drift que vale turbo e itens que mudam a prova — inspirada no gênero, sem qualquer personagem, item ou pista da Nintendo.
 
-**Jogar agora:** [https://kt3746.github.io/pista-maluca/](https://kt3746.github.io/pista-maluca/)
+**Jogar agora:** [https://kt3746.github.io/kart/](https://kt3746.github.io/kart/)
 
 ## Como jogar
 
@@ -77,7 +77,7 @@ npm install
 npm run dev
 ```
 
-Abra `http://localhost:5173/pista-maluca/` (o `base` do Vite é `/pista-maluca/`, o mesmo do GitHub Pages).
+Abra `http://localhost:5173/kart/` (o `base` do Vite é `/kart/`, o mesmo do GitHub Pages).
 
 ```bash
 npm run build

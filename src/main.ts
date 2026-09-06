@@ -3,7 +3,7 @@ import { Game } from "./game/Game";
 
 const canvas = document.getElementById("scene") as HTMLCanvasElement | null;
 const ui = document.getElementById("ui");
-if (!canvas || !ui) throw new Error("Pista Maluca: DOM incompleto");
+if (!canvas || !ui) throw new Error("KART: DOM incompleto");
 
 document.body.addEventListener(
   "touchmove",

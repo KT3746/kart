@@ -99,7 +99,7 @@ export class Game {
         dt = Math.min(0.12, dt);
         this.tick(dt);
       } catch (err) {
-        console.error("Pista Maluca: falha no frame", err);
+        console.error("KART: falha no frame", err);
       } finally {
         this.ticking = false;
       }

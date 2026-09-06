@@ -1,4 +1,4 @@
-export const GAME_TITLE = "Pista Maluca";
+export const GAME_TITLE = "KART";
 
 export const TOTAL_LAPS = 3;
 export const RACER_COUNT = 4;
