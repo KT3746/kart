@@ -4,7 +4,7 @@
  */
 import { chromium } from "playwright";
 
-const BASE = process.env.PISTA_URL || "http://127.0.0.1:5173/pista-maluca/?steer=1";
+const BASE = process.env.PISTA_URL || "http://127.0.0.1:5173/kart/?steer=1";
 
 async function clickAct(page, act) {
   const btn = page.locator(`[data-act="${act}"]`).first();
@@ -116,7 +116,7 @@ async function main() {
     await clickAct(page, "quit");
     await page.waitForTimeout(300);
     const ghost = await page.locator(".hud, #hud-item").count();
-    const title = await page.locator("text=Pista Maluca").count();
+    const title = await page.locator("text=KART").count();
     if (ghost) errors.push(`${name}: ghost HUD after quit (${ghost})`);
     if (!title) errors.push(`${name}: title not restored after quit`);
     await page.close();
