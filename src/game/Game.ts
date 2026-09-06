@@ -28,7 +28,7 @@ export class Game {
   trackId: TrackId = "orla";
   race: Race | null = null;
   cup = new Championship();
-  muted = false;
+  muted = true;
   private menuScene = new THREE.Scene();
   private menuKart: THREE.Group | null = null;
   private clock = new THREE.Clock();
@@ -55,6 +55,7 @@ export class Game {
     this.renderer.setClearColor(MENU_CLEAR, 1);
     this.camera = new THREE.PerspectiveCamera(52, w / h, 0.55, 720);
     this.ui = new UI(uiRoot);
+    this.audio.setMuted(this.muted);
     this.ui.onAction = (a) => this.handle(a);
     this.input.bind(document.body);
     this.setupMenuScene();
@@ -215,6 +216,15 @@ export class Game {
   private ensureTouchLayer(): void {
     const touch = document.getElementById("touch");
     if (!touch) return;
+    // Wide desktop: never bind pads — leftover stick used to steal Arrow keys
+    // and CSS used to force #touch visible even without touch-on.
+    if (!wantsTouchControls()) {
+      this.input.releaseTouch();
+      touch.style.removeProperty("display");
+      touch.style.removeProperty("visibility");
+      touch.style.removeProperty("opacity");
+      return;
+    }
     forceRacePadsVisible(touch);
     this.input.bindTouch(touch);
   }
@@ -514,8 +524,7 @@ export class Game {
       this.renderer.setScissorTest(false);
       this.camera.aspect = w / Math.max(1, h);
       this.camera.updateProjectionMatrix();
-      this.audio.engine(0.12, 0.04, false);
-      this.audio.drift(0);
+      this.audio.silence();
       return;
     }
 
@@ -528,8 +537,7 @@ export class Game {
     this.camera.near = 0.55;
     this.camera.aspect = w / Math.max(1, h);
     this.camera.updateProjectionMatrix();
-    this.audio.engine(0.12, 0.04, false);
-    this.audio.drift(0);
+    this.audio.silence();
     this.renderer.setScissorTest(false);
     this.renderer.setViewport(0, 0, w, h);
     this.renderer.setClearColor(MENU_CLEAR, 1);

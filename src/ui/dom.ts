@@ -235,7 +235,7 @@ export class UI {
     this.set(`
       <div class="hud">
         <div class="hud-tl">
-          <div class="pos"><span id="hud-pos">P4</span><small id="hud-name">—</small></div>
+          <div class="pos"><span id="hud-pos">P–</span><small id="hud-name">—</small></div>
         </div>
         <div class="hud-tr">
           <div class="hud-tr-row">
