@@ -205,13 +205,14 @@ export function stepKart(
   }
 
   const speedNorm = clamp(Math.abs(kart.speed) / 28, 0, 1);
-  let steer = steerIn * (0.55 + stats.handling * 0.7) * (1.2 - 0.55 * speedNorm);
+  // Casual turn rate: keep curves controllable (no 360 spin on a short hold).
+  let steer = steerIn * (0.38 + stats.handling * 0.42) * (1.05 - 0.45 * speedNorm);
 
   if (wantDrift && Math.abs(kart.speed) > 9 && Math.abs(steerIn) > 0.15 && !kart.airborne) {
     if (!kart.drifting) kart.driftDir = Math.sign(steerIn) || kart.driftDir || 1;
     kart.drifting = true;
     kart.driftCharge += dt * (0.55 + stats.drift * 0.85) * (0.65 + Math.abs(steerIn) * 0.5);
-    steer += kart.driftDir * (0.42 + stats.drift * 0.25);
+    steer += kart.driftDir * (0.28 + stats.drift * 0.18);
     kart.speed *= Math.exp(-0.07 * dt);
   } else if (kart.drifting) {
     if (kart.driftCharge > 0.52 && kart.slipTime <= 0) {
@@ -222,11 +223,11 @@ export function stepKart(
   }
 
   const steerScale = (kart.airborne ? 0.15 : 1) * clamp(grip, 0.12, 1.15);
-  kart.yawRate = damp(kart.yawRate, steer * (1.1 + (1 - grip) * 0.35), 11, dt);
-  kart.heading += kart.yawRate * (7.2 + Math.abs(kart.speed) * 0.16) * dt * steerScale;
+  kart.yawRate = damp(kart.yawRate, steer * (0.85 + (1 - grip) * 0.25), 9, dt);
+  kart.heading += kart.yawRate * (2.6 + Math.abs(kart.speed) * 0.05) * dt * steerScale;
   if (Math.abs(steerIn) < 0.2 && kart.onAsphalt && !kart.drifting && !kart.airborne) {
     const roadH = Math.atan2(q.tangent.x, q.tangent.z);
-    kart.heading += wrapPi(roadH - kart.heading) * (1 - Math.exp(-1.7 * dt));
+    kart.heading += wrapPi(roadH - kart.heading) * (1 - Math.exp(-1.2 * dt));
   }
   kart.heading = wrapPi(kart.heading);
 
