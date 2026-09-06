@@ -85,11 +85,11 @@ function dist(a: Racer, b: Racer): number {
 export function rubberBand(racer: Racer, leaderDist: number, playerDist: number): number {
   let m = 1;
   const behindLeader = leaderDist - (racer.kart.lap + racer.kart.progress);
-  if (behindLeader > 0.25) m += Math.min(0.08, behindLeader * 0.06);
-  if (behindLeader < -0.2) m -= Math.min(0.07, -behindLeader * 0.05);
+  if (behindLeader > 0.2) m += Math.min(0.12, behindLeader * 0.08);
+  if (behindLeader < -0.15) m -= Math.min(0.1, -behindLeader * 0.07);
   const vsPlayer = playerDist - (racer.kart.lap + racer.kart.progress);
-  if (vsPlayer > 0.4) m += 0.03;
-  if (vsPlayer < -0.45) m -= 0.03;
+  if (vsPlayer > 0.3) m += 0.05;
+  if (vsPlayer < -0.35) m -= 0.05;
   if (racer.isPlayer) return 1;
-  return clamp(m, 0.9, 1.09);
+  return clamp(m, 0.88, 1.14);
 }
