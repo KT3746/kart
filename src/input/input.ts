@@ -169,7 +169,7 @@ export class Input {
   }
 
   refreshTouchFlag(): void {
-    this.touchMode = wantsTouchControls() || !!this.boundLayer;
+    this.touchMode = wantsTouchControls();
   }
 
   /** Drop the race pad layer so menu clicks are not captured by leftover sticks. */
