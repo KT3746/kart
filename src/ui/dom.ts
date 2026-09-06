@@ -256,8 +256,8 @@ export class UI {
       <div class="banner hidden" id="banner"></div>
       <div class="soot-veil hidden" id="soot-veil"></div>
       <div class="touch" id="touch">
-        <div class="zone stick-wrap" aria-label="Direção"><div class="stick-base"></div><div class="stick-knob"></div></div>
-        <div class="zone pad-right">
+        <div class="zone stick-wrap stick-invisible" aria-label="Direção"><div class="stick-base"></div><div class="stick-knob"></div></div>
+        <div class="zone pad-right pad-row">
           <button type="button" class="pad-btn item" data-pad="item">Item</button>
           <button type="button" class="pad-btn accel" data-pad="throttle">Acelera</button>
         </div>
