@@ -72,7 +72,12 @@ export class Game {
     });
 
     window.addEventListener("resize", () => this.resize());
-    window.addEventListener("orientationchange", () => this.resize());
+    window.addEventListener("orientationchange", () => {
+      this.resize();
+      // iOS/Android report the old size for a beat — second pass fixes stretch.
+      window.setTimeout(() => this.resize(), 120);
+      window.setTimeout(() => this.resize(), 320);
+    });
     window.visualViewport?.addEventListener("resize", () => this.resize());
     // Blur / visibility must NOT pause or abandon. Only Esc and the pause button.
     const unlock = () => {
