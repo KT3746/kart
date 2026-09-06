@@ -144,10 +144,10 @@ export function stepKart(
   const away = kart.position.distanceTo(q.sample.position);
   const planar = Math.hypot(kart.position.x - q.sample.position.x, kart.position.z - q.sample.position.z);
   if (
-    Math.abs(q.lateral) > q.halfWidth + q.runoff + 0.85 ||
-    kart.position.y < -1.2 ||
-    away > 7 ||
-    planar > 8.5
+    Math.abs(q.lateral) > q.halfWidth + q.runoff + 3.2 ||
+    kart.position.y < -2.5 ||
+    away > 14 ||
+    planar > 16
   ) {
     snapToRibbon(kart, track);
     return;
@@ -223,16 +223,30 @@ export function stepKart(
   }
 
   const steerScale = (kart.airborne ? 0.15 : 1) * clamp(grip, 0.12, 1.15);
-  kart.yawRate = damp(kart.yawRate, steer * (0.85 + (1 - grip) * 0.25), 9, dt);
+  // Casual stability: gently counter lateral drift when the player is not hard-steering.
+  let assist = steer;
+  if (!kart.airborne && !kart.drifting && Math.abs(steerIn) < 0.55 && Math.abs(q.lateral) > 0.35) {
+    const pull = clamp(q.lateral / Math.max(2.5, q.halfWidth), -1, 1);
+    // Physics steer sign: negative yaw reads as screen-right; lateral+ is along q.right.
+    // Nudge heading back toward the ribbon center.
+    assist += -pull * (0.55 + Math.abs(kart.speed) * 0.012) * (1 - Math.abs(steerIn));
+  }
+  kart.yawRate = damp(kart.yawRate, assist * (0.85 + (1 - grip) * 0.25), 9, dt);
   kart.heading += kart.yawRate * (2.6 + Math.abs(kart.speed) * 0.05) * dt * steerScale;
-  if (Math.abs(steerIn) < 0.2 && kart.onAsphalt && !kart.drifting && !kart.airborne) {
+  if (Math.abs(steerIn) < 0.35 && kart.onAsphalt && !kart.drifting && !kart.airborne) {
     const roadH = Math.atan2(q.tangent.x, q.tangent.z);
-    kart.heading += wrapPi(roadH - kart.heading) * (1 - Math.exp(-1.2 * dt));
+    const align = 4.2; // was ~1.2 — keep kart pointed with the road
+    kart.heading += wrapPi(roadH - kart.heading) * (1 - Math.exp(-align * dt));
   }
   kart.heading = wrapPi(kart.heading);
 
   FWD.set(Math.sin(kart.heading), 0, Math.cos(kart.heading));
   kart.position.addScaledVector(FWD, kart.speed * dt);
+  // Soft recenter while still on asphalt / light runoff
+  if (!kart.airborne && Math.abs(steerIn) < 0.6 && Math.abs(q.lateral) > 0.4) {
+    const recenter = Math.min(1, Math.abs(q.lateral) / Math.max(1, q.halfWidth));
+    kart.position.addScaledVector(q.right, -Math.sign(q.lateral) * 5.5 * recenter * dt);
+  }
   if (onRunoff && !kart.airborne) {
     kart.position.addScaledVector(q.right, -Math.sign(q.lateral) * 6.4 * dt);
   }
@@ -241,7 +255,7 @@ export function stepKart(
   }
   if (!kart.onAsphalt && !q.sample.shortcut) {
     kart.recoverTimer += dt;
-    if (kart.recoverTimer > 0.4) {
+    if (kart.recoverTimer > 1.35) {
       snapToRibbon(kart, track);
       return;
     }
@@ -259,13 +273,13 @@ export function stepKart(
     kart.position.add(PUSH);
     if (!kart.wallContact) {
       kart.speed *= 0.78;
-      kart.heading += -Math.sign(q2.lateral) * 0.18;
+      kart.heading += -Math.sign(q2.lateral) * 0.08;
       kart.shake = Math.max(kart.shake, 0.2);
       if (kart.drifting) kart.driftCharge *= 0.35;
     }
     kart.wallContact = true;
     kart.offTrackTimer += dt;
-    if (over > 0.85 || kart.offTrackTimer > 0.22) {
+    if (over > 2.4 || kart.offTrackTimer > 1.1) {
       snapToRibbon(kart, track);
       return;
     }
