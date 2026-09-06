@@ -90,11 +90,13 @@ export class ChaseCamera {
     const heading = Number.isFinite(kart.heading) ? kart.heading : 0;
     const speed = Number.isFinite(kart.speed) ? Math.min(Math.abs(kart.speed), 48) : 0;
     const boost = kart.boostTime > 0 ? 1 : 0;
-    const back = (phone ? 11.8 : 10.2) + speed * 0.06;
-    const height = (phone ? 5.4 : 4.6) + speed * 0.01;
+    // Narrow neon alleys: sit higher/further so building faces never fill the lens.
+    const narrow = !!(track && track.def && track.def.mood === "neon");
+    const back = (phone ? 12.6 : 10.6) + speed * 0.06 + (narrow ? 2.4 : 0);
+    const height = (phone ? 6.2 : 5.0) + speed * 0.01 + (narrow ? 2.2 : 0);
     // Look at the kart, not the horizon. Phone pads cover the bottom ~180px,
     // so the player has to sit higher in the frame than a desktop chase.
-    const ahead = (phone ? 3.4 : 5.2) + speed * 0.06;
+    const ahead = (phone ? 3.8 : 5.2) + speed * 0.06;
     const lookY = phone ? 0.55 : 0.62;
     const sin = Math.sin(heading);
     const cos = Math.cos(heading);
@@ -108,7 +110,7 @@ export class ChaseCamera {
     const backZ = -cos;
 
     this.desired.set(px + backX * back, py + height, pz + backZ * back);
-    if (track) stayAboveRoad(this.desired, track, phone ? 5.4 : 4.6);
+    if (track) stayAboveRoad(this.desired, track, phone ? (narrow ? 7.4 : 6.0) : (narrow ? 6.2 : 4.8));
 
     LOOK_TARGET.set(px + sin * ahead, py + lookY, pz + cos * ahead);
 
@@ -134,7 +136,7 @@ export class ChaseCamera {
     if (!isFiniteVec(camera.position) || dx * dx + dy * dy + dz * dz < minDist * minDist) {
       camera.position.copy(this.desired);
     }
-    if (track) stayAboveRoad(camera.position, track, phone ? 5.4 : 4.6);
+    if (track) stayAboveRoad(camera.position, track, phone ? (narrow ? 7.4 : 6.0) : (narrow ? 6.2 : 4.8));
 
     if (!isFiniteVec(this.look) || camera.position.distanceToSquared(this.look) < 0.25) {
       this.look.set(px + sin * 8, py + lookY, pz + cos * 8);
