@@ -182,7 +182,6 @@ export class Input {
   poll(): InputState {
     const k = this.keys;
     const up = k.has("ArrowUp") || k.has("KeyW");
-    const down = k.has("ArrowDown") || k.has("KeyS");
     const left = k.has("ArrowLeft") || k.has("KeyA");
     const right = k.has("ArrowRight") || k.has("KeyD");
     // Drift/brake buttons removed — coast when throttle is released.
