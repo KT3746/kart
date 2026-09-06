@@ -85,7 +85,7 @@ export class AudioEngine {
 
   private applyMaster(): void {
     if (!this.master) return;
-    this.master.gain.value = this.muted ? 0 : 0.18;
+    this.master.gain.value = this.muted ? 0 : 0.48;
   }
 
   setMuted(muted: boolean): void {
@@ -106,7 +106,7 @@ export class AudioEngine {
     this.oscA.frequency.setTargetAtTime(f, this.ctx.currentTime, 0.07);
     this.oscB.frequency.setTargetAtTime(f * 1.03, this.ctx.currentTime, 0.07);
     this.filter.frequency.setTargetAtTime(220 + th * 420 + (boost ? 120 : 0), this.ctx.currentTime, 0.1);
-    const eng = 0.012 + th * 0.055 + r * 0.028 + (boost ? 0.02 : 0);
+    const eng = 0.04 + th * 0.12 + r * 0.06 + (boost ? 0.04 : 0);
     this.engineGain.gain.setTargetAtTime(eng, this.ctx.currentTime, 0.08);
     if (this.noiseGain) {
       const road = th * 0.012 + r * 0.01;

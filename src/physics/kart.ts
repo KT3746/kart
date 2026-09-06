@@ -201,7 +201,7 @@ export function stepKart(
     kart.speed += Math.max(0, room) * (acc / 18) * throttle * dt * (kart.airborne ? 0.25 : 1);
     if (kart.speed < 5) kart.speed += acc * 0.55 * throttle * dt;
   } else {
-    kart.speed *= Math.exp(-0.55 * dt);
+    kart.speed *= Math.exp(-0.85 * dt);
   }
 
   const speedNorm = clamp(Math.abs(kart.speed) / 28, 0, 1);

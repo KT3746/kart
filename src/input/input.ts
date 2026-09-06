@@ -185,17 +185,14 @@ export class Input {
     const down = k.has("ArrowDown") || k.has("KeyS");
     const left = k.has("ArrowLeft") || k.has("KeyA");
     const right = k.has("ArrowRight") || k.has("KeyD");
-    const drift = k.has("ShiftLeft") || k.has("ShiftRight") || k.has("Space") || this.pad.drift;
-    // Keys win while held. A leftover stick X used to overwrite ArrowRight
-    // (click-to-focus on the 390 stick, or a missed pointerup) so the revisor
-    // saw keyboard go the opposite way of the working touch.
+    // Drift/brake buttons removed — coast when throttle is released.
     const fromKeys = keyPlayerRight(left, right);
     const stickLive = this.steerPointer !== null;
     const playerRight = fromKeys !== 0 ? fromKeys : stickLive ? this.steerTouch : 0;
     this.state.throttle = this.pad.throttle || up ? 1 : 0;
-    this.state.brake = this.pad.brake || down ? 1 : 0;
+    this.state.brake = 0;
     this.state.steer = steerFromPlayerRight(playerRight);
-    this.state.drift = drift;
+    this.state.drift = false;
     this.state.item = this.itemPressed;
     return this.state;
   }

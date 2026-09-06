@@ -143,9 +143,9 @@ export class UI {
           <div class="eyebrow">Como dirigir</div>
           <h2>Controles</h2>
           <div class="sheet">
-            <p><b>No celular:</b> à esquerda o direcional (arraste o dedo). À direita: <b>Acelera</b>, <b>Freio</b>, <b>Drift</b> e <b>Item</b>. Depois do VAI!, segure Acelera para o kart andar.</p>
-            <p><b>No teclado:</b> W ou ↑ acelera · S ou ↓ freia · A D dirige · Shift ou Espaço faz drift · E usa o item · Esc pausa.</p>
-            <p>Segure o drift numa curva e solte limpo para um turbo curto. Caixas douradas no asfalto enchem o slot.</p>
+            <p><b>No celular:</b> à esquerda o direcional. À direita: <b>Acelera</b> e <b>Item</b>. Segure Acelera pra andar; solte pra ir freando sozinho.</p>
+            <p><b>No teclado:</b> W ou ↑ acelera · A D dirige · E usa o item · Esc pausa.</p>
+            <p>Caixas douradas no asfalto enchem o slot de item. Use na hora certa.</p>
             <p><b>Disco Ímã</b> segue a fita da pista e busca quem está à frente. <b>Sabão</b> deixa uma poça escorregadia atrás. <b>Carga Turbo</b> empurra. <b>Fuligem</b> cega e atrasa quem vem atrás. <b>Gancho</b> puxa a próxima caixa dourada.</p>
           </div>
         </div>
@@ -259,8 +259,6 @@ export class UI {
         <div class="zone stick-wrap" aria-label="Direção"><div class="stick-base"></div><div class="stick-knob"></div></div>
         <div class="zone pad-right">
           <button type="button" class="pad-btn item" data-pad="item">Item</button>
-          <button type="button" class="pad-btn drift" data-pad="drift">Drift</button>
-          <button type="button" class="pad-btn brake" data-pad="brake">Freio</button>
           <button type="button" class="pad-btn accel" data-pad="throttle">Acelera</button>
         </div>
       </div>
@@ -393,8 +391,8 @@ export class UI {
         <div class="eyebrow">Prova interrompida</div>
         <h2>Pausa</h2>
         <div class="sheet" style="margin-top:10px">
-          <p><b>Celular:</b> esquerda = direção. Direita = Acelera, Freio, Drift e Item.</p>
-          <p><b>Teclado:</b> W acelera · S freia · A D dirige · Shift drift · E item.</p>
+          <p><b>Celular:</b> esquerda = direção. Direita = Acelera e Item.</p>
+          <p><b>Teclado:</b> W acelera · A D dirige · E item.</p>
         </div>
         <div class="stack">
           <button type="button" class="btn primary" data-act="resume">Continuar</button>
