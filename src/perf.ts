@@ -40,9 +40,9 @@ export class PerfMonitor {
     this.acc = 0;
     this.frames = 0;
     if (this.locked) return false;
-    if (this.fps < 25) this.lowHits += 1;
-    else this.lowHits = Math.max(0, this.lowHits - 1);
-    if (this.lowHits >= 2 && this.tier !== "low") {
+    if (this.fps < 18) this.lowHits += 1;
+    else this.lowHits = Math.max(0, this.lowHits - 2);
+    if (this.lowHits >= 6 && this.tier !== "low") {
       this.tier = "low";
       return true;
     }
