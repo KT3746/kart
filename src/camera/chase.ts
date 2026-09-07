@@ -163,10 +163,17 @@ export class ChaseCamera {
       }
     }
 
-    const wantFov = (phone ? 50 : 48) + speed * 0.18 + boost * 4;
-    this.fov = snap ? wantFov : damp(this.fov, wantFov, 3.6, dt);
+    const wantFov = (phone ? 50 : 48) + speed * 0.22 + boost * 7;
+    this.fov = snap ? wantFov : damp(this.fov, wantFov, 4.2, dt);
     if (!Number.isFinite(this.fov)) this.fov = 50;
-    camera.fov = clamp(this.fov, 42, 68);
+    camera.fov = clamp(this.fov, 42, 72);
+    // Light punch when the kart shakes (hits / walls / landings).
+    if (kart.shake > 0 && !snap) {
+      const punch = Math.min(0.22, kart.shake) * 0.55;
+      camera.position.x += (Math.random() - 0.5) * punch;
+      camera.position.y += (Math.random() - 0.5) * punch * 0.6;
+      camera.position.z += (Math.random() - 0.5) * punch;
+    }
     camera.near = RACE_NEAR;
     camera.far = RACE_FAR;
     const w = typeof window !== "undefined" ? Math.max(1, window.innerWidth) : 1280;
