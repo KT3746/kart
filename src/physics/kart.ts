@@ -188,9 +188,9 @@ export function stepKart(
 
   const top =
     (22 + stats.topSpeed * 18) *
-    (kart.boostTime > 0 ? 1.42 : 1) *
+    (kart.boostTime > 0 ? 1.52 : 1) *
     (kart.onAsphalt ? 1 : kart.airborne ? 0.72 : onRunoff ? 0.32 : 0.18);
-  const acc = 9.5 + stats.accel * 12;
+  const acc = 10.4 + stats.accel * 12.5;
 
   if (!kart.onAsphalt && !kart.airborne) {
     kart.speed *= Math.exp(-(onRunoff ? 1.8 : 3.2) * dt);
@@ -201,7 +201,7 @@ export function stepKart(
   } else if (throttle > 0.05) {
     const room = top - kart.speed;
     kart.speed += Math.max(0, room) * (acc / 18) * throttle * dt * (kart.airborne ? 0.25 : 1);
-    if (kart.speed < 5) kart.speed += acc * 0.55 * throttle * dt;
+    if (kart.speed < 6) kart.speed += acc * 0.72 * throttle * dt;
   } else {
     kart.speed *= Math.exp(-0.85 * dt);
   }
