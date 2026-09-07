@@ -103,7 +103,7 @@ export class ItemSystem {
     racer.item = null;
     const kart = racer.kart;
     if (id === "turbo") {
-      kart.boostTime = Math.max(kart.boostTime, 1.55);
+      kart.boostTime = Math.max(kart.boostTime, 1.85);
       return;
     }
     if (id === "hook") {
