@@ -85,7 +85,7 @@ export class AudioEngine {
 
   private applyMaster(): void {
     if (!this.master) return;
-    this.master.gain.value = this.muted ? 0 : 0.48;
+    this.master.gain.value = this.muted ? 0 : 0.58;
   }
 
   setMuted(muted: boolean): void {
@@ -102,11 +102,11 @@ export class AudioEngine {
     if (!this.ctx || !this.oscA || !this.oscB || !this.filter || !this.engineGain) return;
     const r = Math.max(0, Math.min(1, rpm));
     const th = Math.max(0, Math.min(1, throttle));
-    const f = 48 + r * 62 + (boost ? 10 : 0);
-    this.oscA.frequency.setTargetAtTime(f, this.ctx.currentTime, 0.07);
-    this.oscB.frequency.setTargetAtTime(f * 1.03, this.ctx.currentTime, 0.07);
-    this.filter.frequency.setTargetAtTime(220 + th * 420 + (boost ? 120 : 0), this.ctx.currentTime, 0.1);
-    const eng = 0.04 + th * 0.12 + r * 0.06 + (boost ? 0.04 : 0);
+    const f = 48 + r * 68 + (boost ? 22 : 0);
+    this.oscA.frequency.setTargetAtTime(f, this.ctx.currentTime, 0.06);
+    this.oscB.frequency.setTargetAtTime(f * 1.04, this.ctx.currentTime, 0.06);
+    this.filter.frequency.setTargetAtTime(220 + th * 480 + (boost ? 220 : 0), this.ctx.currentTime, 0.08);
+    const eng = 0.045 + th * 0.14 + r * 0.07 + (boost ? 0.08 : 0);
     this.engineGain.gain.setTargetAtTime(eng, this.ctx.currentTime, 0.08);
     if (this.noiseGain) {
       const road = th * 0.012 + r * 0.01;
@@ -137,21 +137,30 @@ export class AudioEngine {
 
   whoosh(): void {
     if (!this.ctx || !this.master || this.muted) return;
+    const t0 = this.ctx.currentTime;
     const o = this.ctx.createOscillator();
+    const o2 = this.ctx.createOscillator();
     const g = this.ctx.createGain();
     const f = this.ctx.createBiquadFilter();
-    o.type = "sine";
-    o.frequency.setValueAtTime(140, this.ctx.currentTime);
-    o.frequency.exponentialRampToValueAtTime(50, this.ctx.currentTime + 0.28);
+    o.type = "sawtooth";
+    o2.type = "sine";
+    o.frequency.setValueAtTime(220, t0);
+    o.frequency.exponentialRampToValueAtTime(70, t0 + 0.32);
+    o2.frequency.setValueAtTime(440, t0);
+    o2.frequency.exponentialRampToValueAtTime(110, t0 + 0.28);
     f.type = "lowpass";
-    f.frequency.value = 600;
-    g.gain.setValueAtTime(0.05, this.ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.3);
+    f.frequency.setValueAtTime(1400, t0);
+    f.frequency.exponentialRampToValueAtTime(380, t0 + 0.32);
+    g.gain.setValueAtTime(0.09, t0);
+    g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.36);
     o.connect(f);
+    o2.connect(f);
     f.connect(g);
     g.connect(this.master);
     o.start();
-    o.stop(this.ctx.currentTime + 0.32);
+    o2.start();
+    o.stop(t0 + 0.38);
+    o2.stop(t0 + 0.38);
   }
 
   finish(): void {
@@ -161,8 +170,11 @@ export class AudioEngine {
   }
 
   countdown(n: number): void {
-    if (n <= 0) this.blip(520, 0.18, "triangle");
-    else this.blip(200 + n * 30, 0.1, "sine");
+    if (n <= 0) {
+      this.blip(392, 0.1, "triangle");
+      setTimeout(() => this.blip(523, 0.12, "triangle"), 60);
+      setTimeout(() => this.blip(784, 0.22, "sine"), 120);
+    } else this.blip(180 + n * 45, 0.12, "sine");
   }
 
   item(): void {

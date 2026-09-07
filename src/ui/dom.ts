@@ -247,13 +247,14 @@ export class UI {
           </div>
         </div>
         <div class="hud-bot">
-          <div class="speed-box"><div class="kicker">km/h</div><div class="num" id="hud-spd">0</div></div>
+          <div class="speed-box" id="hud-speed"><div class="kicker">km/h</div><div class="num" id="hud-spd">0</div></div>
           <div class="item-slot" id="hud-item">VAZIO</div>
         </div>
       </div>
       <div class="steer-dbg hidden" id="steer-dbg"></div>
       <div class="countdown hidden" id="countdown">3</div>
       <div class="banner hidden" id="banner"></div>
+      <div class="speedlines hidden" id="speedlines" aria-hidden="true"></div>
       <div class="soot-veil hidden" id="soot-veil"></div>
       <div class="touch" id="touch">
         <div class="zone stick-wrap stick-invisible" aria-label="Direção"><div class="stick-base"></div><div class="stick-knob"></div></div>
@@ -276,12 +277,15 @@ export class UI {
     item: ItemId | null;
     trackName: string;
     smoke?: boolean;
+    boost?: boolean;
   }): void {
     const pos = this.root.querySelector("#hud-pos");
     const name = this.root.querySelector("#hud-name");
     const lap = this.root.querySelector("#hud-lap");
     const spd = this.root.querySelector("#hud-spd");
     const item = this.root.querySelector("#hud-item");
+    const speedBox = this.root.querySelector("#hud-speed");
+    const lines = this.root.querySelector("#speedlines");
     if (pos) pos.textContent = `P${data.place}`;
     if (name) name.textContent = data.trackName;
     if (lap) lap.textContent = `${Math.min(data.laps, data.lap + 1)}/${data.laps}`;
@@ -291,6 +295,10 @@ export class UI {
       item.classList.toggle("armed", !!data.item);
     }
     this.root.querySelector("#soot-veil")?.classList.toggle("hidden", !data.smoke);
+    const boosting = !!data.boost;
+    speedBox?.classList.toggle("boosting", boosting);
+    lines?.classList.toggle("hidden", !boosting);
+    document.body.classList.toggle("is-boost", boosting);
   }
 
   setSteerDebug(text: string | null): void {
@@ -358,10 +366,18 @@ export class UI {
   setCountdown(text: string | null): void {
     if (!this.countdownEl) this.countdownEl = this.root.querySelector("#countdown");
     if (!this.countdownEl) return;
-    if (!text) this.countdownEl.classList.add("hidden");
-    else {
+    if (!text) {
+      this.countdownEl.classList.add("hidden");
+      this.countdownEl.classList.remove("go", "pop");
+    } else {
       this.countdownEl.classList.remove("hidden");
+      const go = /vai/i.test(text);
+      this.countdownEl.classList.toggle("go", go);
       this.countdownEl.textContent = text;
+      // Retrigger CSS pop every tick change.
+      this.countdownEl.classList.remove("pop");
+      void this.countdownEl.offsetWidth;
+      this.countdownEl.classList.add("pop");
     }
   }
 
@@ -369,13 +385,19 @@ export class UI {
     const el = this.root.querySelector("#banner");
     if (!el) return;
     window.clearTimeout(this.bannerTimer);
-    if (!text) el.classList.add("hidden");
-    else {
+    if (!text) {
+      el.classList.add("hidden");
+      el.classList.remove("pop");
+    } else {
       el.classList.remove("hidden");
       el.textContent = text;
+      el.classList.remove("pop");
+      void (el as HTMLElement).offsetWidth;
+      el.classList.add("pop");
       if (ms > 0) {
         this.bannerTimer = window.setTimeout(() => {
           el.classList.add("hidden");
+          el.classList.remove("pop");
         }, ms);
       }
     }

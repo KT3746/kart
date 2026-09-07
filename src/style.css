@@ -566,6 +566,7 @@ h2 {
 .item-slot.armed {
   border-color: var(--gold);
   color: var(--gold-soft);
+  animation: item-pulse 0.9s ease-in-out infinite;
 }
 
 #minimap {
@@ -630,9 +631,30 @@ body:not(.is-race) .pause-btn {
   font-family: var(--font-display);
   font-size: clamp(80px, 18vw, 160px);
   letter-spacing: 0.08em;
-  text-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  color: #fff;
+  text-shadow:
+    0 0 18px rgba(255, 200, 80, 0.55),
+    0 12px 40px rgba(0, 0, 0, 0.65);
   pointer-events: none;
   z-index: 4;
+}
+
+.countdown.pop {
+  animation: count-pop 0.42s cubic-bezier(0.2, 1.4, 0.3, 1) both;
+}
+
+.countdown.go {
+  color: #7dff9a;
+  font-size: clamp(92px, 20vw, 180px);
+  text-shadow:
+    0 0 28px rgba(80, 255, 140, 0.75),
+    0 12px 40px rgba(0, 0, 0, 0.65);
+}
+
+@keyframes count-pop {
+  0% { transform: scale(0.55); opacity: 0.2; filter: blur(2px); }
+  55% { transform: scale(1.12); opacity: 1; filter: blur(0); }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 .banner {
@@ -645,6 +667,54 @@ body:not(.is-race) .pause-btn {
   font-size: 22px;
   color: var(--gold-soft);
   pointer-events: none;
+  z-index: 5;
+  text-shadow: 0 0 16px rgba(255, 200, 80, 0.45);
+}
+
+.banner.pop {
+  animation: banner-pop 0.5s cubic-bezier(0.2, 1.35, 0.3, 1) both;
+}
+
+@keyframes banner-pop {
+  0% { transform: translateX(-50%) translateY(10px) scale(0.85); opacity: 0; }
+  60% { transform: translateX(-50%) translateY(0) scale(1.06); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+}
+
+.speedlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 46%,
+      rgba(255, 230, 160, 0.07) 48%,
+      transparent 52% 100%
+    );
+  mix-blend-mode: screen;
+  opacity: 0.85;
+  animation: speed-rush 0.28s linear infinite;
+}
+
+@keyframes speed-rush {
+  from { transform: scaleX(1.05) translateX(-2%); }
+  to { transform: scaleX(1.15) translateX(2%); }
+}
+
+.speed-box.boosting .num {
+  color: #ffe27a;
+  text-shadow: 0 0 14px rgba(255, 180, 40, 0.8);
+}
+
+@keyframes item-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 200, 80, 0.15); transform: scale(1); }
+  50% { box-shadow: 0 0 18px 2px rgba(255, 200, 80, 0.45); transform: scale(1.03); }
+}
+
+body.is-boost .hud-bot .speed-box {
+  border-color: rgba(255, 210, 90, 0.65);
 }
 
 .overlay {
