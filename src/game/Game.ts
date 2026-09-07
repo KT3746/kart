@@ -368,14 +368,20 @@ export class Game {
       if (kind === "go") {
         this.audio.countdown(0);
         this.ui.setCountdown("VAI!");
-        setTimeout(() => this.ui.setCountdown(null), 500);
+        this.ui.banner("LARGADA!", 700);
+        setTimeout(() => this.ui.setCountdown(null), 780);
       }
       if (kind === "item") this.audio.item();
       if (kind === "hit") {
         this.audio.hit();
-        if (navigator.vibrate) navigator.vibrate(24);
+        this.race?.fx.spawnHit(this.race.player.kart);
+        if (navigator.vibrate) navigator.vibrate([18, 30, 18]);
       }
-      if (kind === "boost") this.audio.whoosh();
+      if (kind === "boost") {
+        this.audio.whoosh();
+        this.ui.banner("TURBO!", 520);
+        if (navigator.vibrate) navigator.vibrate(12);
+      }
       if (kind === "respawn") this.ui.banner("DE VOLTA À PISTA", 900);
       if (kind === "finish") {
         this.audio.finish();
@@ -459,6 +465,7 @@ export class Game {
         item: p.item,
         trackName: this.race.built.def.name,
         smoke: p.kart.smokeTime > 0,
+        boost: p.kart.boostTime > 0,
       });
       this.ui.drawMinimap(
         this.race.minimapPoints(),
